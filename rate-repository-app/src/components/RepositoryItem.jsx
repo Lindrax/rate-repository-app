@@ -5,7 +5,7 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     backgroundColor: 'white',
     padding: 15,
   },
@@ -16,43 +16,30 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   content: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
+    paddingBottom: 10,
   },
-  fullName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  description: {
-    color: theme.colors.textSecondary,
-    marginBottom: 5,
+  basic: {
+    padding: 0,
+    flexDirection: 'column',
   },
   language: {
     backgroundColor: theme.colors.primary,
-    color: 'white',
-    paddingVertical: 4,
-    paddingHorizontal: 6,
     borderRadius: 4,
+    padding: 5,
+    color: 'white',
+    alignItems: 'center',
     alignSelf: 'flex-start',
-    marginBottom: 10,
   },
   stats: {
     flexDirection: 'row',
-
-    justifyContent: 'space-between',
-    paddingVertical: 10,
+    alignSelf: 'flex-start',
+    padding: 10,
+    gap: 25,
   },
-  statItem: {
-    flex: 1,
-    minWidth: 100,
-  },
-  statValue: {
-    fontWeight: 'bold',
+  statitem: {
+    flexDirection: 'column',
+    gap: 7,
   },
 });
 
@@ -63,50 +50,36 @@ const formatCount = (count) => {
   return count.toString();
 };
 
-const BasicInfo = ({ item }) => {
-  console.log(item);
-  return (
-    <View style={styles.container}>
-      <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.fullName}>{item.fullName}</Text>
-        </View>
-        <Text style={styles.description}>{item.description}</Text>
-        <Text style={styles.language}>{item.language}</Text>
-        <View style={styles.stats}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {formatCount(item.stargazersCount)}
-            </Text>
-            <Text>Stars</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{formatCount(item.forksCount)}</Text>
-            <Text>Forks</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {formatCount(item.reviewCount)}
-            </Text>
-            <Text>Reviews</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>
-              {formatCount(item.ratingAverage)}
-            </Text>
-            <Text>Rating</Text>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-};
-
 const Item = ({ item }) => {
   return (
     <View style={styles.container}>
-      <BasicInfo item={item} />
+      <View style={styles.content}>
+        <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
+
+        <View style={styles.basic}>
+          <Text fontWeight="bold">{item.fullName}</Text>
+          <Text color="textSecondary">{item.description}</Text>
+          <Text style={styles.language}>{item.language}</Text>
+        </View>
+      </View>
+      <View style={styles.stats}>
+        <View style={styles.statitem}>
+          <Text fontWeight="bold">{formatCount(item.stargazersCount)}</Text>
+          <Text color="textSecondary"> stars</Text>
+        </View>
+        <View style={styles.statitem}>
+          <Text fontWeight="bold">{formatCount(item.forksCount)}</Text>
+          <Text color="textSecondary"> forks </Text>
+        </View>
+        <View style={styles.statitem}>
+          <Text fontWeight="bold">{formatCount(item.reviewCount)}</Text>
+          <Text color="textSecondary"> Reviews</Text>
+        </View>
+        <View style={styles.statitem}>
+          <Text fontWeight="bold">{formatCount(item.ratingAverage)}</Text>
+          <Text color="textSecondary"> Rating </Text>
+        </View>
+      </View>
     </View>
   );
 };

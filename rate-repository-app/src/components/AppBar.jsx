@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 import theme from '../theme';
 import Text from './Text';
 import { Link } from 'react-router-native';
-import { ScrollView } from 'react-native-web';
+import { ScrollView } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
