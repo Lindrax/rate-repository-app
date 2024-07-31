@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   basic: {
     padding: 0,
     flexDirection: 'column',
+    maxWidth: 300,
   },
   language: {
     backgroundColor: theme.colors.primary,
