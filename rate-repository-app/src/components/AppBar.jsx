@@ -1,9 +1,12 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import theme from '../theme';
 import Text from './Text';
 import { Link } from 'react-router-native';
 import { ScrollView } from 'react-native';
+import { useApolloClient, useQuery } from '@apollo/client';
+import { ME } from '../graphql/queries';
+import useAuthStorage from '../hooks/useAuthStorage';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +21,37 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const authStorage = useAuthStorage();
+  const client = useApolloClient();
+
+  const { data, loading } = useQuery(ME);
+
+  const handeLogout = () => {
+    console.log('logging out');
+    authStorage.removeAccessToken();
+    client.resetStore();
+  };
+
+  if (!loading && data.me) {
+    return (
+      <View style={styles.container}>
+        <ScrollView horizontal>
+          <Link to="/">
+            <Text color="white" fontSize="subheading" style={styles.button}>
+              Repositories
+            </Text>
+          </Link>
+
+          <Pressable onPress={handeLogout}>
+            <Text color="white" fontSize="subheading" style={styles.button}>
+              Sign out
+            </Text>
+          </Pressable>
+        </ScrollView>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
