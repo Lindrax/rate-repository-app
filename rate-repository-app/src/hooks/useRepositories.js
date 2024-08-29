@@ -5,14 +5,18 @@ import { GET_REPOSITORIES } from '../graphql/queries';
 const useRepositories = () => {
 
   const { data, error, loading, refetch } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: 'cache-and-network'
+    
+    onError: (error) => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n')
+      console.log(messages)
+    }
   })
 
   const repositories = data
     ? data.repositories
     : null
 
-
+  
   return { repositories, loading, refetch };
 };
 

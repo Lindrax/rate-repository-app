@@ -6,6 +6,8 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import useSignIn from '../hooks/useSignIn';
 import { useNavigate } from 'react-router-native';
+import { SIGN_UP } from '../graphql/mutations';
+import { useMutation } from '@apollo/client';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,12 +42,19 @@ const styles = StyleSheet.create({
 const validationSchema = yup.object().shape({
   username: yup
     .string()
-    .min(1, 'username must be longer or equal to 1')
+    .min(5, 'username must be longer or equal to 5')
+    .max(30, 'username must be shorter than 30')
     .required('username is required'),
   password: yup
     .string()
-    .min(1, 'password must be longer or equal to 1')
+    .min(5, 'password must be longer or equal to 5')
+    .max(30, 'password must be shorter than 30')
     .required('password is required'),
+  passwordconfirm: yup
+    .string()
+    .required('Repeat the password')
+    .oneOf([yup.ref('password'), null], "passwords don't match")
+    .required('Password confirm is required'),
 });
 
 export const SignInForm = ({ onSubmit }) => {
@@ -53,6 +62,7 @@ export const SignInForm = ({ onSubmit }) => {
     initialValues: {
       username: '',
       password: '',
+      passwordconfirm: '',
     },
     onSubmit,
     validationSchema,
@@ -80,21 +90,46 @@ export const SignInForm = ({ onSubmit }) => {
         <Text style={{ color: 'red' }}>{formik.errors.password}</Text>
       )}
 
+      <TextInput
+        placeholder="Repeat password"
+        value={formik.values.passwordconfirm}
+        onChangeText={formik.handleChange('passwordconfirm')}
+        style={[styles.box, formik.errors.password ? styles.error : null]}
+      />
+      {formik.touched.passwordconfirm && formik.errors.passwordconfirm && (
+        <Text style={{ color: 'red' }}>{formik.errors.passwordconfirm}</Text>
+      )}
+
       <Pressable onPress={formik.handleSubmit} style={styles.submit}>
-        <Text>Sign in</Text>
+        <Text>Sign up</Text>
       </Pressable>
     </View>
   );
 };
 
-const SignIn = () => {
+const SignUp = () => {
   const [signIn] = useSignIn();
   const navigate = useNavigate();
 
+  const [createUser, result] = useMutation(SIGN_UP, {
+    onError: (error) => {
+      const messages = error.graphQLErrors.map((e) => e.message).join('\n');
+      console.log(messages);
+    },
+  });
+
   const onSubmit = async (values) => {
     const { username, password } = values;
+    const user = {
+      username: username,
+      password: password,
+    };
 
     try {
+      await createUser({
+        variables: { user },
+      });
+      console.log(result);
       const { data } = await signIn({ username, password });
       console.log(data);
       navigate('/');
@@ -106,4 +141,4 @@ const SignIn = () => {
   return <SignInForm onSubmit={onSubmit} />;
 };
 
-export default SignIn;
+export default SignUp;

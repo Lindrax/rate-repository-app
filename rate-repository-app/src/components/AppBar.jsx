@@ -41,6 +41,11 @@ const AppBar = () => {
               Repositories
             </Text>
           </Link>
+          <Link to="/review">
+            <Text color="white" fontSize="subheading" style={styles.button}>
+              Review
+            </Text>
+          </Link>
 
           <Pressable onPress={handeLogout}>
             <Text color="white" fontSize="subheading" style={styles.button}>
@@ -64,6 +69,12 @@ const AppBar = () => {
         <Link to="/login">
           <Text color="white" fontSize="subheading" style={styles.button}>
             Sign in
+          </Text>
+        </Link>
+
+        <Link to="/signup">
+          <Text color="white" fontSize="subheading" style={styles.button}>
+            Sign up
           </Text>
         </Link>
       </ScrollView>

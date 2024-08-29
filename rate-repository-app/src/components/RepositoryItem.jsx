@@ -1,7 +1,9 @@
-import { Image, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import Text from './Text';
 import { StyleSheet } from 'react-native';
 import theme from '../theme';
+import { useNavigate } from 'react-router-native';
+import { openURL } from 'expo-linking';
 
 const styles = StyleSheet.create({
   container: {
@@ -42,6 +44,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 7,
   },
+  button: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 4,
+    padding: 10,
+    alignItems: 'center',
+  },
 });
 
 const formatCount = (count) => {
@@ -51,36 +59,56 @@ const formatCount = (count) => {
   return count.toString();
 };
 
-const Item = ({ item }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
+const Item = ({ item, url }) => {
+  const navigate = useNavigate();
 
-        <View style={styles.basic}>
-          <Text fontWeight="bold">{item.fullName}</Text>
-          <Text color="textSecondary">{item.description}</Text>
-          <Text style={styles.language}>{item.language}</Text>
+  const handlePress = (event) => {
+    event.preventDefault();
+    console.log('pressed');
+    console.log(item.id);
+    navigate(`/${item.id}`);
+  };
+
+  return (
+    <View testID="repositoryItem" style={styles.container}>
+      <Pressable onPress={handlePress}>
+        <View style={styles.content}>
+          <Image style={styles.logo} source={{ uri: item.ownerAvatarUrl }} />
+
+          <View style={styles.basic}>
+            <Text fontWeight="bold">{item.fullName}</Text>
+            <Text color="textSecondary">{item.description}</Text>
+            <Text style={styles.language}>{item.language}</Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.stats}>
-        <View style={styles.statitem}>
-          <Text fontWeight="bold">{formatCount(item.stargazersCount)}</Text>
-          <Text color="textSecondary"> stars</Text>
+        <View style={styles.stats}>
+          <View style={styles.statitem}>
+            <Text fontWeight="bold">{formatCount(item.stargazersCount)}</Text>
+            <Text color="textSecondary"> stars</Text>
+          </View>
+          <View style={styles.statitem}>
+            <Text fontWeight="bold">{formatCount(item.forksCount)}</Text>
+            <Text color="textSecondary"> forks </Text>
+          </View>
+          <View style={styles.statitem}>
+            <Text fontWeight="bold">{formatCount(item.reviewCount)}</Text>
+            <Text color="textSecondary"> Reviews</Text>
+          </View>
+          <View style={styles.statitem}>
+            <Text fontWeight="bold">{formatCount(item.ratingAverage)}</Text>
+            <Text color="textSecondary"> Rating </Text>
+          </View>
         </View>
-        <View style={styles.statitem}>
-          <Text fontWeight="bold">{formatCount(item.forksCount)}</Text>
-          <Text color="textSecondary"> forks </Text>
-        </View>
-        <View style={styles.statitem}>
-          <Text fontWeight="bold">{formatCount(item.reviewCount)}</Text>
-          <Text color="textSecondary"> Reviews</Text>
-        </View>
-        <View style={styles.statitem}>
-          <Text fontWeight="bold">{formatCount(item.ratingAverage)}</Text>
-          <Text color="textSecondary"> Rating </Text>
-        </View>
-      </View>
+        {url && (
+          <View style={styles.button}>
+            <Pressable onPress={() => openURL(item.url)}>
+              <Text style={{ color: 'white', padding: 10 }}>
+                Open in GitHub
+              </Text>
+            </Pressable>
+          </View>
+        )}
+      </Pressable>
     </View>
   );
 };
