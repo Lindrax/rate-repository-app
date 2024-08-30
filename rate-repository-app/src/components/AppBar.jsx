@@ -2,7 +2,7 @@ import { View, StyleSheet, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import theme from '../theme';
 import Text from './Text';
-import { Link } from 'react-router-native';
+import { Link, useNavigate } from 'react-router-native';
 import { ScrollView } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/client';
 import { ME } from '../graphql/queries';
@@ -44,6 +44,11 @@ const AppBar = () => {
           <Link to="/review">
             <Text color="white" fontSize="subheading" style={styles.button}>
               Review
+            </Text>
+          </Link>
+          <Link to="/reviews">
+            <Text color="white" fontSize="subheading" style={styles.button}>
+              My reviews
             </Text>
           </Link>
 

@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const dateParser = (date) => {
-  return date.split('T')[0];
-};
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
+  const dateParser = (date) => {
+    return date.split('T')[0];
+  };
   return (
     <View style={styles.container}>
       <View style={styles.rating}>
@@ -74,8 +74,6 @@ const SingleItem = () => {
     ? data.repository.reviews.edges.map((edge) => edge.node)
     : [];
 
-  console.log(data);
-  console.log(reviewNodes);
   return (
     <FlatList
       data={reviewNodes}

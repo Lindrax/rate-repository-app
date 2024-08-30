@@ -8,6 +8,7 @@ import SignIn from './SignIn';
 import SingleItem from './SingleItem';
 import Review from './Review';
 import SignUp from './SignUp';
+import Reviews from './Reviews';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,6 +28,7 @@ const Main = () => {
         <Route path="/:id" element={<SingleItem />} />
         <Route path="/review" element={<Review />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/reviews" element={<Reviews />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </View>
